@@ -2,8 +2,6 @@
 
 ## Machine Learning Pipeline
 
-## Machine Learning Pipeline
-
 ```mermaid
 graph TD
     subgraph Data Preparation
