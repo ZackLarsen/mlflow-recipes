@@ -1,5 +1,28 @@
 # mlflow-recipes
 
+## Mindmap
+
+```mermaid
+mindmap
+  root((Machine Learning))
+    Supervized
+      Semi supervized
+    Unsupervized
+      Clustering
+        HAC
+        DBScan
+        KMeans
+      Dimensionality Reduction
+        PCA
+        SVD
+    Generative
+      ChatGPT
+    Tools
+      scikit learn
+      PyTorch
+```
+
+
 ## Machine Learning Pipeline
 
 ```mermaid
