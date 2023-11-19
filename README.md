@@ -1,95 +1,107 @@
 # mlflow-recipes
 
-## MLOps
+## MLflow Recipes DAG
 
 ```mermaid
-graph LR
-  subgraph Data
-    D1[Raw Data]
-    D2[Processed Data]
-  end
+graph TD
 
-  subgraph Models
-    M1[Training]
-    M2[Evaluation]
-    M3[Selection]
-  end
+  RD[(Raw Data)]
+  SD[(Scoring Data)]
+  CR[(Cleaned Raw Data)]
+  CS[(Cleaned Scoring Data)]
+  TRD[(Train)]
+  TED[(Test)]
+  VD[(Validation)]
+  TP[(Train Preds)]
+  TTR[(Transformed Train)]
+  TTE[(Transformed Test)]
+  TVD[(Transformed Validation)]
+  TS[(Transformed Scoring)]
 
-  subgraph Deployment
-    S1[Infrastructure]
-    S2[Model Serving]
-  end
+  M[/Model/]
 
-  subgraph Monitoring
-    A1[Performance Metrics]
-    A2[Alerts & Notifications]
-  end
+  IN[ingest.py]
+  SP[split.py]
+  TR[transform.py]
+  T[train.py]
+  TU[tune.py]
+  EV[evaluate.py]
+  RE[register.py]
+  PR[predict.py]
 
-  subgraph Collaboration
-    C1[Version Control]
-    C2[Code Review]
-    C3[Continuous Integration]
-    C4[Continuous Deployment]
-  end
+  RD --> IN
+  SD --> IN
+  IN --ingest--> CL[clean.py]
+  IN --ingest_scoring--> CL
+  CL --> CR
+  CL --> CS
+  CR --> SP
+  SP --> TRD
+  SP --> TED
+  SP --> VD
 
-  subgraph MLOps
-    D1 --> M1
-    M1 --> M2
-    M2 --> M3
-    M3 --> S2
-    S2 --> A1
-    A2 --> C2
-    C1 --> C2
-    C2 --> C3
-    C3 --> C4
-  end
+  TRD --> TR
+  TED --> TR
+  VD --> TR
+  CS --> TR
+
+  TR --> TTR
+  TR --> TTE
+  TR --> TVD
+  TR --> TS
+
+  TTR --> T
+  T --> M
+  M --> PR
+  TTR --> PR
+  TS --> PR
+
+  PR --> TP
+  TP --> EV
+  TTE --> EV --> MET[metrics]
+
+  M --> RE
+  MET --> RE
+
+  TVD --> TU
 
 ```
-
 
 ## Mindmap
 
 ```mermaid
 mindmap
-  root((Machine Learning))
-    Supervized
-      Semi supervized
-    Unsupervized
-      Clustering
-        HAC
-        DBScan
-        KMeans
-      Dimensionality Reduction
-        PCA
-        SVD
-    Generative
-      ChatGPT
-    Tools
-      scikit learn
-      PyTorch
-```
-
-
-## Machine Learning Pipeline
-
-```mermaid
-graph TD
-    subgraph Data Preparation
-    A[Data Ingestion] --> B[Data Cleaning]
-    B --> C[Feature Engineering]
-    end
-    subgraph Model Training
-    D[Model Selection] --> E[Hyperparameter Tuning 1]
-    D --> F[Hyperparameter Tuning 2]
-    E --> G[Model Training 1]
-    F --> H[Model Training 2]
-    end
-    subgraph Model Deployment
-    I[Model Evaluation] --> J[Model Deployment]
-    end
-    C --> G
-    C --> H
-    G --> I
-    H --> I
-    I --> J
+  root((MLflow Recipes))
+    Classification
+    Regression
+    Steps
+      ingest.py
+      clean.py
+      split.py
+      transform.py
+      train.py
+      tune.py
+      evaluate.py
+      register.py
+      predict.py
+    Recipes
+    Templates
+    Profiles
+      databricks.yaml
+      local.yaml
+    Step Cards
+      ingest
+      clean
+      split
+      transform
+      train
+      tune
+      evaluate
+      register
+      predict
+    Usage
+      Notebooks
+        jupyter.ipynb
+      CLI
+        mlflow recipes run --profile local
 ```
